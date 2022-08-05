@@ -2,10 +2,18 @@ package com.ecommerce.imobiliaria.Models;
 
 import com.ecommerce.imobiliaria.Models.Enums.FinalidadeImovel;
 import com.ecommerce.imobiliaria.Models.Enums.TipoImovel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Imovel {
 
@@ -13,9 +21,9 @@ public class Imovel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idImovel;
 
-    @NumberFormat(pattern = "#.##0,00")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(nullable = false)
-    private double dataCriacao;
+    private LocalDate dataCriacao;
 
     @Column
     private Boolean contratoAluguel = false;
@@ -52,4 +60,6 @@ public class Imovel {
 
     @Enumerated(EnumType.STRING)
     private TipoImovel tipoImovel;
+
+
 }
