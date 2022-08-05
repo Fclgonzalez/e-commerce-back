@@ -12,15 +12,18 @@ import javax.persistence.*;
 @Table(name="endereco")
 public class Endereco {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer idEndereco;
+
     @Column (nullable = false, length = 100)
     private String logradouro;
+
     @Column (nullable = false)
     private Integer numero;
 
     @Column (nullable = true)
     private String complemento;
+
     @Column (nullable = false, length = 100)
     private String bairro;
 
@@ -29,6 +32,7 @@ public class Endereco {
 
     @Column (nullable = false, length = 100)
     private String cidade;
+
     @Column (nullable = false, length = 2)
     private String uf;
 

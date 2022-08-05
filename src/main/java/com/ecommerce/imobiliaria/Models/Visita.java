@@ -1,4 +1,4 @@
 package com.ecommerce.imobiliaria.Models;
 
-public class Visitas {
+public class Visita {
 }
