@@ -26,10 +26,10 @@ public class Imovel {
     private LocalDate dataCriacao;
 
     @Column
-    private Boolean contratoAluguel = false;
+    private boolean contratoAluguel = false;
 
     @Column
-    private Boolean contratoVenda = false;
+    private boolean contratoVenda = false;
 
     @Column(nullable = false)
     private double valorAluguel;

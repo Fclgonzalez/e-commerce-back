@@ -1,4 +1,4 @@
 package com.ecommerce.imobiliaria.Services;
 
-public class VisitasService {
+public class VisitaService {
 }
