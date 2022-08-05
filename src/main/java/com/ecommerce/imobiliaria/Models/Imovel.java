@@ -10,6 +10,8 @@ import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Data
 @AllArgsConstructor
@@ -61,5 +63,6 @@ public class Imovel {
     @Enumerated(EnumType.STRING)
     private TipoImovel tipoImovel;
 
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Caracteristica> caracteristicas = new ArrayList<>();
 }
