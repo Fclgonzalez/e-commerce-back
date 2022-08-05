@@ -6,7 +6,6 @@ import com.ecommerce.imobiliaria.Models.Imovel;
 import com.ecommerce.imobiliaria.Repositories.CaracteristicaRepository;
 import com.ecommerce.imobiliaria.Repositories.ImovelRepository;
 import lombok.Builder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
