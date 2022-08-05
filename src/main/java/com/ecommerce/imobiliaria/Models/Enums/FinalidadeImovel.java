@@ -1,6 +1,6 @@
 package com.ecommerce.imobiliaria.Models.Enums;
 
-public enum Finalidade {
+public enum FinalidadeImovel {
 
     COMERCIAL("Comercial"),
     CORPORATIVA("Corporativa"),
@@ -11,7 +11,7 @@ public enum Finalidade {
 
     private String opcao;
 
-     Finalidade (String opcao){
+     FinalidadeImovel(String opcao){
         this.opcao = opcao;
     }
 
