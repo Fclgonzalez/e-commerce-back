@@ -29,7 +29,9 @@ public class UserService implements UserDetailsService {
     private final ConfirmationTokenService confirmationTokenService;
     private ConfirmationTokenRepository confirmationTokenRepository;
 
-
+    public List<User> listar() {
+        return userRepository.findAll();
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
