@@ -3,7 +3,9 @@ package com.ecommerce.imobiliaria.Controller;
 
 import com.ecommerce.imobiliaria.Models.Caracteristica;
 import com.ecommerce.imobiliaria.Services.CaracteristicaService;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -12,9 +14,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@RequestMapping("/imobil/")
+@RequestMapping("/imobil")
 @RestController
-@Builder
+@AllArgsConstructor
 public class CaracteristicaController {
 
     private CaracteristicaService caracteristicaService;
