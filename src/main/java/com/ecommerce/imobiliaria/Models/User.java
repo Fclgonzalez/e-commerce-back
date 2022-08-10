@@ -1,6 +1,5 @@
 package com.ecommerce.imobiliaria.Models;
 
-import com.ecommerce.imobiliaria.Models.Enums.TipoRole;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -57,8 +56,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "id_endereco", unique = true)
     private Endereco endereco;
 
-    @Enumerated(EnumType.STRING)
-    private TipoRole tipoRole;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role"))
+    private Set<Role> roles = new HashSet<>();
 
     private boolean enabled = false;
     private boolean locked = false;
@@ -75,8 +75,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(tipoRole.toString());
-        return Collections.singletonList(authority);
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return authorities;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.ecommerce.imobiliaria.Services;
 
-import com.ecommerce.imobiliaria.Models.Enums.TipoRole;
 import com.ecommerce.imobiliaria.Models.User;
 import com.ecommerce.imobiliaria.Registro.Token.ConfirmationToken;
 import com.ecommerce.imobiliaria.Registro.Token.ConfirmationTokenRepository;
@@ -8,6 +7,7 @@ import com.ecommerce.imobiliaria.Registro.Token.ConfirmationTokenService;
 import com.ecommerce.imobiliaria.Repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,8 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +27,7 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
     private ConfirmationTokenRepository confirmationTokenRepository;
+    private final RoleService roleService;
 
     public List<User> listar() {
         return userRepository.findAll();
@@ -41,7 +41,11 @@ public class UserService implements UserDetailsService {
                  } else {
                     log.info("Usuário: {} encontrado", username);
                  }
-                 return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getPassword(), user.get().getAuthorities());
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                 user.get().getRoles().forEach(role -> {
+                     authorities.add(new SimpleGrantedAuthority(role.getName()));
+                 });
+                 return new org.springframework.security.core.userdetails.User(user.get().getUsername(), user.get().getPassword(), authorities);
     }
 
     public String signUpUser(User user) {
@@ -72,7 +76,6 @@ public class UserService implements UserDetailsService {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user.setDataCriacao(LocalDateTime.now());
             user.setDataAtualizacao(LocalDateTime.now());
-            user.setTipoRole(TipoRole.CONSUMIDOR);
             userRepository.save(user);
                 confirmationTokenService.saveConfirmationToken(confirmationToken);
             return token;

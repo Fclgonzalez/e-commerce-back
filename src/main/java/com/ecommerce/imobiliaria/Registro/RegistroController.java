@@ -2,6 +2,7 @@ package com.ecommerce.imobiliaria.Registro;
 
 
 import com.ecommerce.imobiliaria.Models.User;
+import com.ecommerce.imobiliaria.Services.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,11 @@ public class RegistroController {
     private RegistroService registroService;
 
     private AuthenticationManager authenticationManager;
+    private RoleService roleService;
 
-    @PostMapping("/registro")
+    @PostMapping("/registro/consumidor")
     public String registro(@RequestBody RegistroRequest request) {
+
         return ResponseEntity.status(HttpStatus.CREATED).body(registroService.registro(request)).getBody();
     }
 
@@ -30,5 +33,9 @@ public class RegistroController {
         return registroService.confirmToken(token);
     }
 
+    @PostMapping("/registro/vendedor")
+    public String registroVendedor(@RequestBody RegistroRequest request) {
 
+        return ResponseEntity.status(HttpStatus.CREATED).body(registroService.registro(request)).getBody();
+    }
 }
