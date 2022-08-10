@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,10 +23,12 @@ public class CaracteristicaController {
 
     private CaracteristicaService caracteristicaService;
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/caracts")
     public List<Caracteristica> mostrarCaracteristicas(){
         return caracteristicaService.mostrarCaracteristicas();
     }
+
 
     @PostMapping("/caracts")
     public ResponseEntity<Caracteristica> save(@RequestBody Caracteristica caracteristica) {
