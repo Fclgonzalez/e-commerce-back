@@ -1,14 +1,12 @@
 package com.ecommerce.imobiliaria.Registro;
 
-import com.ecommerce.imobiliaria.Models.Enums.TipoRole;
 import com.ecommerce.imobiliaria.Models.User;
 import com.ecommerce.imobiliaria.Registro.Email.EmailSender;
 import com.ecommerce.imobiliaria.Registro.Token.ConfirmationToken;
 import com.ecommerce.imobiliaria.Registro.Token.ConfirmationTokenService;
-import com.ecommerce.imobiliaria.Repositories.UserRepository;
+import com.ecommerce.imobiliaria.Services.RoleService;
 import com.ecommerce.imobiliaria.Services.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,6 +20,7 @@ public class RegistroService {
     private ConfirmationTokenService confirmationTokenService;
     private EmailValidator emailValidator;
     private EmailSender emailSender;
+    private RoleService roleService;
 
 
     @Transactional
@@ -37,9 +36,11 @@ public class RegistroService {
                         request.getIdentificacao())
 
         );
+        roleService.salvarRoleNoUser("CONSUMIDOR", request.getUsername());
         String link = "http://localhost:8080/imobil/confirmar?token=" + token;
         emailSender.send(request.getUsername(), buildEmail(request.getNome(), link ));
         return token;
+
     }
 
     @Transactional
