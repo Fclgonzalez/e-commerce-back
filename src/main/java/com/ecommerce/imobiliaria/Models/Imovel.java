@@ -75,37 +75,4 @@ public class Imovel {
     private User userVendedor;
 
     private Boolean inativo = true;
-
-    public Imovel preencherImovel(ImovelTemporario imovelTemporario){
-        Imovel imovel = new Imovel();
-        imovel.setIdImovel(imovelTemporario.getIdImovel());
-        if(imovelTemporario.isContratoAluguel()){
-            imovel.setContratoAluguel(imovelTemporario.isContratoAluguel());
-            imovel.setContratoVenda(false);
-        }
-        if(imovelTemporario.isContratoVenda()){
-            imovel.setContratoVenda(imovelTemporario.isContratoVenda());
-            imovel.setContratoAluguel(false);
-        }
-        imovel.setValorAluguel(imovelTemporario.getValorAluguel());
-        imovel.setValorVenda(imovelTemporario.getValorVenda());
-        imovel.setArea(imovelTemporario.getArea());
-        if(imovelTemporario.getDescricao() != null){
-            imovel.setDescricao(imovelTemporario.getDescricao());
-        }
-        imovel.setQuartos(imovelTemporario.getQuartos());
-        imovel.setSuite(imovelTemporario.getSuite());
-        imovel.setBanheiros(imovelTemporario.getBanheiros());
-        imovel.setVagas(imovelTemporario.getVagas());
-        if(imovelTemporario.getFinalidadeImovel() != null) {
-            imovel.setFinalidadeImovel(FinalidadeImovel.valueOf(imovelTemporario.getFinalidadeImovel()));
-        }
-        if(imovelTemporario.getTipoImovel() != null) {
-            imovel.setTipoImovel(TipoImovel.valueOf(imovelTemporario.getTipoImovel()));
-        }
-        imovel.setCaracteristicas(imovelTemporario.getCaracteristicas());
-        imovel.setEndereco(imovelTemporario.getEndereco());
-        imovel.setUserVendedor(imovelTemporario.getUserVendedor());
-        return imovel;
-    }
 }

@@ -5,6 +5,7 @@ import com.ecommerce.imobiliaria.Models.ImovelTemporario;
 import com.ecommerce.imobiliaria.Services.ImovelService;
 import com.ecommerce.imobiliaria.Services.UserService;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/imobil")
 @RestController
 @AllArgsConstructor
+@NoArgsConstructor
 public class ImovelController {
 
     private ImovelService imovelService;
@@ -110,7 +112,7 @@ public class ImovelController {
     public ResponseEntity<Imovel> cadastrarImovel(@PathVariable Integer idVendedor,
                                                   @RequestBody ImovelTemporario imovelTemporario){
         Imovel imovel = new Imovel();
-        imovel = imovel.preencherImovel(imovelTemporario);
+        imovel = imovelService.preencherImovel(imovelTemporario);
         imovel.setUserVendedor(userService.findById(idVendedor));
         imovel = imovelService.cadastrarImovel(imovel, idVendedor);
         URI novaURI = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
@@ -130,7 +132,7 @@ public class ImovelController {
     public ResponseEntity<Imovel> editarImovel(@PathVariable Integer idImovel,
                                                @RequestBody ImovelTemporario imovelTemporario){
         Imovel imovel = new Imovel();
-        imovel = imovel.preencherImovel(imovelTemporario);
+        imovel = imovelService.preencherImovel(imovelTemporario);
         imovel.setIdImovel(idImovel);
         imovelService.editarImovel(imovel, idImovel);
         return ResponseEntity.ok().build();
