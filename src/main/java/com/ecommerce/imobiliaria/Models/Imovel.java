@@ -3,17 +3,17 @@ package com.ecommerce.imobiliaria.Models;
 import com.ecommerce.imobiliaria.Models.Enums.FinalidadeImovel;
 import com.ecommerce.imobiliaria.Models.Enums.TipoImovel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -25,7 +25,7 @@ public class Imovel {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(nullable = false)
-    private LocalDate dataCriacao;
+    private Date dataCriacao;
 
     @Column
     private boolean contratoAluguel = false;
@@ -65,4 +65,14 @@ public class Imovel {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Caracteristica> caracteristicas = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "idEndereco", unique = true)
+    private Endereco endereco;
+
+    @ManyToOne
+    @JoinColumn(name = "idVendedor", nullable = false)
+    private User userVendedor;
+
+    private Boolean inativo = true;
 }
