@@ -7,6 +7,8 @@ import com.ecommerce.imobiliaria.Repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class RoleService {
@@ -15,7 +17,16 @@ public class RoleService {
 
     //SaveRole
     public Role novaRole(Role role) {
+        role.setId(role.getId());
         return roleRepository.save(role);
+    }
+
+    public List<Role> listarRole() {
+        return roleRepository.findAll();
+    }
+
+    public Role findById(Long id) {
+        return roleRepository.findById(id).get();
     }
 
     //AddRoleToUser

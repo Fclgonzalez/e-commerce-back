@@ -4,6 +4,7 @@ import com.ecommerce.imobiliaria.Models.Endereco;
 import com.ecommerce.imobiliaria.Services.EnderecoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -17,6 +18,7 @@ public class EnderecoController {
 
     private EnderecoService enderecoService;
 
+    @PreAuthorize("hasAnyAuthority('CONSUMIDOR')")
     @GetMapping("/enderecos")
     public List<Endereco> mostrarTodosEnderecos() {
         List<Endereco> enderecos = enderecoService.mostrarTodosEnderecos();
@@ -29,6 +31,7 @@ public class EnderecoController {
         return ResponseEntity.ok().body(endereco);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
     @PostMapping("/enderecos")
     public ResponseEntity<Endereco> cadastrarEndereco(@RequestBody Endereco endereco) {
         endereco = enderecoService.cadastrarEndereco(endereco);
@@ -36,10 +39,11 @@ public class EnderecoController {
         return ResponseEntity.created(novaURI).body(endereco);
     }
 
+    @PreAuthorize("hasAnyAuthority('CONSUMIDOR')")
     @PutMapping("/enderecos/{idEndereco}")
     public ResponseEntity<Endereco> editarEndereco(@PathVariable Integer idEndereco, @RequestBody Endereco endereco) {
         endereco.setIdEndereco(idEndereco);
-        enderecoService.editarEndereco(endereco, idEndereco);
+        enderecoService.editarEndereco(endereco);
         return ResponseEntity.ok().body(endereco);
     }
 
