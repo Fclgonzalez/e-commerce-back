@@ -10,14 +10,17 @@ import java.util.Optional;
 
 public interface ImovelRepository extends JpaRepository<Imovel, Integer> {
 
-//    List<Imovel> findByVendedor(Optional<User> user);
-
     List<Imovel> findByContratoAluguel(Boolean contratoAluguel);
+
+    @Query(value = "SELECT * FROM ecommerceimobiliaria.imovel WHERE id_vendedor = :idUser", nativeQuery = true)
+    List<Imovel> findByIdUser(Integer idUser);
 
     List<Imovel> findByContratoVenda(Boolean contratoVenda);
 
+    @Query(value = "SELECT * FROM imovel WHERE contrato_aluguel = 1 AND valor_aluguel BETWEEN 0 AND :valorAluguel", nativeQuery = true)
     List<Imovel> findByValorAluguel(Double valorAluguel);
 
+    @Query(value = "SELECT * FROM imovel WHERE contrato_venda = 1 AND valor_venda BETWEEN 0 AND :valorVenda", nativeQuery = true)
     List<Imovel> findByValorVenda(Double valorVenda);
 
     List<Imovel> findByArea(Double area);

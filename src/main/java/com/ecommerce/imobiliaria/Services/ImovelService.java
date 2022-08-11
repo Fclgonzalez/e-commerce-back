@@ -6,9 +6,12 @@ import com.ecommerce.imobiliaria.Repositories.ImovelRepository;
 import com.ecommerce.imobiliaria.Repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -31,10 +34,10 @@ public class ImovelService {
         return imovel.orElseThrow();
     }
 
-//    public List<Imovel> mostrarImovelVendedor(Integer idVendedor) {
-//        Optional<User> user = userRepository.findById(idVendedor);
-//        return imovelRepository.findByVendedor(user);
-//    }
+    public List<Imovel> mostrarImovelVendedor(Integer idVendedor) {
+        Optional<User> user = userRepository.findById(idVendedor);
+        return imovelRepository.findByIdUser(user.get().getIdUser());
+    }
 
     public List<Imovel> mostrarImovelContratoAluguel(Boolean contratoAluguel){
         return imovelRepository.findByContratoAluguel(contratoAluguel = true);
@@ -79,4 +82,19 @@ public class ImovelService {
    public List<Imovel> mostrarImovelTipo(String tipoImovel){
         return imovelRepository.findByTipoImovel(tipoImovel);
    }
+
+   //POST
+   public Imovel cadastrarImovel(Imovel imovel, Integer idVendedor){
+        imovel.setDataCriacao(new Date());
+        Optional<User> user = userRepository.findById(idVendedor);
+        imovel.setUserVendedor(user.get());
+        return imovelRepository.save(imovel);
+   }
+
+   //DELETE
+   public void excluirImovel(Integer idImovel) {
+        imovelRepository.deleteById(idImovel);
+   }
+
+
 }
