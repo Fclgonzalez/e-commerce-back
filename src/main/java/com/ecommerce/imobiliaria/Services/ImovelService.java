@@ -1,5 +1,6 @@
 package com.ecommerce.imobiliaria.Services;
 
+import com.ecommerce.imobiliaria.Models.Endereco;
 import com.ecommerce.imobiliaria.Models.Imovel;
 import com.ecommerce.imobiliaria.Models.User;
 import com.ecommerce.imobiliaria.Repositories.ImovelRepository;
@@ -96,5 +97,20 @@ public class ImovelService {
         imovelRepository.deleteById(idImovel);
    }
 
+   //PUT
+   public Imovel editarImovel(Imovel imovel, Integer idImovel){
+        Imovel imovelSemAsAlteracoes = mostrarImovelById(idImovel);
+        User user = imovelSemAsAlteracoes.getUserVendedor();
+        Endereco endereco = imovelSemAsAlteracoes.getEndereco();
+        imovel.setDataCriacao(imovelSemAsAlteracoes.getDataCriacao());
+        imovel.setEndereco(endereco);
+        imovel.setUserVendedor(user);
+        return imovelRepository.save(imovel);
+   }
 
+   public Imovel inativarImovel(Integer idImovel, Boolean inativo){
+        Imovel imovel = mostrarImovelById(idImovel);
+        imovel.setInativo(inativo = false);
+        return imovelRepository.save(imovel);
+   }
 }

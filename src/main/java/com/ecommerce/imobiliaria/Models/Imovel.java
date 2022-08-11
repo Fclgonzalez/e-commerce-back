@@ -66,13 +66,15 @@ public class Imovel {
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Caracteristica> caracteristicas = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idEndereco", unique = true)
     private Endereco endereco;
 
     @ManyToOne
     @JoinColumn(name = "idVendedor", nullable = false)
     private User userVendedor;
+
+    private Boolean inativo = true;
 
     public Imovel preencherImovel(ImovelTemporario imovelTemporario){
         Imovel imovel = new Imovel();

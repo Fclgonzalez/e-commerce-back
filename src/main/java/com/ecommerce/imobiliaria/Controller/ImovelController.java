@@ -6,6 +6,7 @@ import com.ecommerce.imobiliaria.Services.ImovelService;
 import com.ecommerce.imobiliaria.Services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -104,21 +105,42 @@ public class ImovelController {
         return imoveis;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','VENDEDOR')")
     @PostMapping("/imoveis/{idVendedor}")
     public ResponseEntity<Imovel> cadastrarImovel(@PathVariable Integer idVendedor,
                                                   @RequestBody ImovelTemporario imovelTemporario){
         Imovel imovel = new Imovel();
         imovel = imovel.preencherImovel(imovelTemporario);
-//        imovel.setUserVendedor(userService.);
+        imovel.setUserVendedor(userService.findById(idVendedor));
         imovel = imovelService.cadastrarImovel(imovel, idVendedor);
         URI novaURI = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
                 .buildAndExpand(imovel.getIdImovel()).toUri();
         return ResponseEntity.created(novaURI).body(imovel);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @DeleteMapping("/imoveis/{idImovel}")
     public ResponseEntity<Void> excluirImovel(@PathVariable Integer idImovel){
         imovelService.excluirImovel(idImovel);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDEDOR')")
+    @PutMapping("/imoveis/{idImovel}")
+    public ResponseEntity<Imovel> editarImovel(@PathVariable Integer idImovel,
+                                               @RequestBody ImovelTemporario imovelTemporario){
+        Imovel imovel = new Imovel();
+        imovel = imovel.preencherImovel(imovelTemporario);
+        imovel.setIdImovel(idImovel);
+        imovelService.editarImovel(imovel, idImovel);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDEDOR')")
+    @PutMapping("/imoveisInativar/{idImovel}")
+    public ResponseEntity<Imovel> inativarImovel(@PathVariable Integer idImovel,
+                                               @RequestParam("inativo") Boolean inativo){
+        imovelService.inativarImovel(idImovel, inativo);
         return ResponseEntity.noContent().build();
     }
 }
