@@ -87,13 +87,64 @@ public class UserService implements UserDetailsService {
 
     }
 
+    //promover usuário para admin
+    public void promoverParaAdmin(Integer idUser) {
+        User user = userRepository.findById(idUser).orElse(null);
+        if (user != null) {
+            roleService.salvarRoleNoUser("ADMIN", user.getUsername());
+            userRepository.save(user);
+        } else {
+            throw new IllegalStateException("Usuário não encontrado");
+        }
+    }
+
+    //promover CONSUMIDOR para VENDEDOR
+    public void promoverParaVendedor(Integer idUser) {
+        User user = userRepository.findById(idUser).orElse(null);
+        if (user != null) {
+            roleService.salvarRoleNoUser("VENDEDOR", user.getUsername());
+            userRepository.save(user);
+        } else {
+            throw new IllegalStateException("Usuário não encontrado");
+        }
+    }
+
+
     public int enableUser(String email){
         return userRepository.enableUser(email);
     }
 
     //delete user
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public void deleteUser(Integer id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            userRepository.delete(user);
+        } else {
+            throw new IllegalStateException("Usuário não encontrado");
+        }
+    }
+
+    public User findById(Integer idUser) {
+        return userRepository.findById(idUser).orElseThrow( () -> new IllegalStateException("Usuário não encontrado"));
+    }
+
+    //update user
+    public User updateUser(User user) {
+        User userExistente = userRepository.findById(user.getIdUser()).orElse(null);
+        if (userExistente != null) {
+
+
+            findById(user.getIdUser());
+            user.setDataAtualizacao(LocalDateTime.now());
+            user.setDataCriacao(userExistente.getDataCriacao());
+            user.setPassword(userExistente.getPassword());
+            user.setEnabled(userExistente.isEnabled());
+            user.setRoles(userExistente.getRoles());
+            user.setUsername(userExistente.getUsername());
+            return userRepository.save(user);
+        } else {
+            throw new IllegalStateException("Usuário não encontrado");
+        }
     }
 
 }

@@ -24,7 +24,7 @@ public class RegistroService {
 
 
     @Transactional
-    public String registro(RegistroRequest request) {
+    public String registroConsumidor(RegistroRequest request) {
         boolean isValidEmail = emailValidator.test(request.getUsername());
         if (!isValidEmail) {
             throw new IllegalStateException("Formato de Email inválido. Esperado: exemplo@exemplo.exemplo");
@@ -37,6 +37,26 @@ public class RegistroService {
 
         );
         roleService.salvarRoleNoUser("CONSUMIDOR", request.getUsername());
+        String link = "http://localhost:8080/imobil/confirmar?token=" + token;
+        emailSender.send(request.getUsername(), buildEmail(request.getNome(), link ));
+        return token;
+
+    }
+
+    @Transactional
+    public String registroVendedor(RegistroRequest request) {
+        boolean isValidEmail = emailValidator.test(request.getUsername());
+        if (!isValidEmail) {
+            throw new IllegalStateException("Formato de Email inválido. Esperado: exemplo@exemplo.exemplo");
+        }
+        String token = userService.signUpUser(
+                new User(request.getNome(),
+                        request.getUsername(),
+                        request.getPassword(),
+                        request.getIdentificacao())
+
+        );
+        roleService.salvarRoleNoUser("VENDEDOR", request.getUsername());
         String link = "http://localhost:8080/imobil/confirmar?token=" + token;
         emailSender.send(request.getUsername(), buildEmail(request.getNome(), link ));
         return token;
