@@ -18,9 +18,9 @@ public class RegistroController {
     private RoleService roleService;
 
     @PostMapping("/registro/consumidor")
-    public String registro(@RequestBody RegistroRequest request) {
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(registroService.registroConsumidor(request)).getBody();
+    public ResponseEntity<Void> registroConsumidor(@RequestBody RegistroRequest request) {
+        registroService.registroConsumidor(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/confirmar")
@@ -29,8 +29,8 @@ public class RegistroController {
     }
 
     @PostMapping("/registro/vendedor")
-    public String registroVendedor(@RequestBody RegistroRequest request) {
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(registroService.registroVendedor(request)).getBody();
+    public ResponseEntity<Void> registroVendedor(@RequestBody RegistroRequest request) {
+        registroService.registroVendedor(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
