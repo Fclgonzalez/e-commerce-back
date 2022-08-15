@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +23,10 @@ public class Imovel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idImovel;
+
+    @Column
+    @NotEmpty
+    private String titulo;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(nullable = false)

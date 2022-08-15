@@ -19,12 +19,12 @@ public class RoleController {
 
     private RoleService roleService;
 
-    @RequestMapping("/roles")
+    @GetMapping("/roles")
     public List<Role> roles(){
         return roleService.listarRole();
     }
 
-    @RequestMapping("/roles/{id}")
+    @GetMapping("/roles/{id}")
     public ResponseEntity<Role> roleById(@PathVariable Long id){
          roleService.findById(id);
         return ResponseEntity.ok().body(roleService.findById(id));

@@ -61,6 +61,9 @@ public class User implements UserDetails {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Endereco enderecO;
+
     @JsonIgnore
     private boolean enabled = false;
     @JsonIgnore

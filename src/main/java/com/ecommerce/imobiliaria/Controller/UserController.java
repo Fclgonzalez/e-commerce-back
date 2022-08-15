@@ -24,6 +24,12 @@ public class UserController {
         return userService.listar();
     }
 
+    //findUserByRoleId
+    @GetMapping("/usuarios/role/{roleId}")
+    public List<User> findUserByRoleId(@PathVariable Integer roleId) {
+        return userService.findUsersByRoleId(roleId);
+    }
+
     @GetMapping("/usuarios/{id}")
     public User usuario(@PathVariable Integer id) {
         return userService.findById(id);
@@ -45,5 +51,25 @@ public class UserController {
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    //disabilitarConta
+    @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
+    @PatchMapping("/usuarios/{username}/disable")
+    public ResponseEntity<User> disableUser(@PathVariable String username,  Principal principal) {
+        if (principal.getName().equals(username)) {
+            User userUpdated = userService.disabilitarConta(username);
+            return new ResponseEntity<>(userUpdated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PatchMapping("/usuarios/{username}/admin")
+    public ResponseEntity<User> adminDisableUser(@PathVariable String username ) {
+
+            User userUpdated = userService.disabilitarConta(username);
+            return new ResponseEntity<>(userUpdated, HttpStatus.OK);
     }
 }

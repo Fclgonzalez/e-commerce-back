@@ -4,18 +4,21 @@ import com.ecommerce.imobiliaria.Models.User;
 import com.ecommerce.imobiliaria.Registro.Email.EmailSender;
 import com.ecommerce.imobiliaria.Registro.Token.ConfirmationToken;
 import com.ecommerce.imobiliaria.Registro.Token.ConfirmationTokenService;
+import com.ecommerce.imobiliaria.Repositories.UserRepository;
 import com.ecommerce.imobiliaria.Services.RoleService;
 import com.ecommerce.imobiliaria.Services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class RegistroService {
-
+    private UserRepository userRepository;
     private UserService userService;
     private ConfirmationTokenService confirmationTokenService;
     private EmailValidator emailValidator;
@@ -26,8 +29,11 @@ public class RegistroService {
     @Transactional
     public String registroConsumidor(RegistroRequest request) {
         boolean isValidEmail = emailValidator.test(request.getUsername());
+        Optional<User> user = userRepository.findByUsername(request.getUsername());
         if (!isValidEmail) {
-            throw new IllegalStateException("Formato de Email inválido. Esperado: exemplo@exemplo.exemplo");
+            throw new DataIntegrityViolationException("Formato de Email inválido. Esperado: exemplo@exemplo.exemplo");
+        } else if (user.isPresent()) {
+            throw new DataIntegrityViolationException("Usuário já cadastrado");
         }
         String token = userService.signUpUser(
                 new User(request.getNome(),
@@ -39,15 +45,18 @@ public class RegistroService {
         roleService.salvarRoleNoUser("CONSUMIDOR", request.getUsername());
         String link = "http://localhost:8080/imobil/confirmar?token=" + token;
         emailSender.send(request.getUsername(), buildEmail(request.getNome(), link ));
-        return token;
+        return null;
 
     }
 
     @Transactional
     public String registroVendedor(RegistroRequest request) {
         boolean isValidEmail = emailValidator.test(request.getUsername());
+        Optional<User> user = userRepository.findByUsername(request.getUsername());
         if (!isValidEmail) {
-            throw new IllegalStateException("Formato de Email inválido. Esperado: exemplo@exemplo.exemplo");
+            throw new DataIntegrityViolationException("Formato de Email inválido. Esperado: exemplo@exemplo.exemplo");
+        } else if (user.isPresent()) {
+            throw new DataIntegrityViolationException("Usuário já cadastrado");
         }
         String token = userService.signUpUser(
                 new User(request.getNome(),
@@ -59,7 +68,7 @@ public class RegistroService {
         roleService.salvarRoleNoUser("VENDEDOR", request.getUsername());
         String link = "http://localhost:8080/imobil/confirmar?token=" + token;
         emailSender.send(request.getUsername(), buildEmail(request.getNome(), link ));
-        return token;
+        return null;
 
     }
 

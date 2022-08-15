@@ -147,4 +147,19 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    //findUserByRoleId
+    public List<User> findUsersByRoleId(Integer idRole) {
+        return userRepository.findUserByRoleId(idRole);
+    }
+
+    //set user to disabled
+    public User disabilitarConta(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow( () -> new IllegalStateException("Usuário não encontrado"));
+        if (user != null) {
+            user.setEnabled(false);
+            userRepository.save(user);
+        }
+        return null;
+    }
+
 }
