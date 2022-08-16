@@ -32,9 +32,17 @@ public class EnderecoController {
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
-    @PostMapping("/enderecos")
-    public ResponseEntity<Endereco> cadastrarEndereco(@RequestBody Endereco endereco) {
-        endereco = enderecoService.cadastrarEndereco(endereco);
+    @PostMapping("/enderecos/usuario/{idUser}")
+    public ResponseEntity<Endereco> cadastrarEnderecoUsuario(@RequestBody Endereco endereco, @PathVariable Integer idUser) {
+        endereco = enderecoService.cadastrarEnderecoUsuario(endereco, idUser);
+        URI novaURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(endereco.getIdEndereco()).toUri();
+        return ResponseEntity.created(novaURI).body(endereco);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
+    @PostMapping("/enderecos/imovel/{idImovel}")
+    public ResponseEntity<Endereco> cadastrarEnderecoImovel(@RequestBody Endereco endereco, @PathVariable Integer idImovel) {
+        endereco = enderecoService.cadastrarEnderecoImovel(endereco, idImovel);
         URI novaURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(endereco.getIdEndereco()).toUri();
         return ResponseEntity.created(novaURI).body(endereco);
     }

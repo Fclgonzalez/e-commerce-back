@@ -54,15 +54,12 @@ public class User implements UserDetails {
 
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_endereco", unique = true)
+    @JoinColumn(name = "idEndereco", unique = true)
     private Endereco endereco;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Set<Role> roles = new HashSet<>();
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private Endereco enderecO;
 
     @JsonIgnore
     private boolean enabled = false;
@@ -75,8 +72,6 @@ public class User implements UserDetails {
         this.password = password;
         this.identificacao = identificacao;
     }
-
-
 
 
     @Override
