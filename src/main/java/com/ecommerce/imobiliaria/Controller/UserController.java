@@ -35,6 +35,11 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @GetMapping("/usuarios/username/{username}")
+    public User usuarioPorUsername(@PathVariable String username) {
+        return userService.findByUsername(username);
+    }
+
     @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
     @DeleteMapping("/usuarios/{id}")
     public void deletar(@PathVariable Integer id) {
