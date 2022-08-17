@@ -129,4 +129,14 @@ public class VisitaService {
         return visitaRepository.findByStatusAndIdConsumidor(status, idConsumidor);
 
     }
+
+    //findVisitasPorMes
+    public List<Visita> findVisitasPorMes() {
+        return (List<Visita>) visitaRepository.findVisitasPorMes();
+    }
+
+    //findTotalVisitas
+    public Integer findTotalVisitas() {
+        return visitaRepository.findTotalVisitas();
+    }
 }

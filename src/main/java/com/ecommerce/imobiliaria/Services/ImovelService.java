@@ -123,6 +123,15 @@ public class ImovelService {
         return imovelRepository.findByTipoImovel(tipoImovel);
    }
 
+   //findImoveisPerMOnth
+    public List<Imovel> findImoveisPerMOnth(){
+         return (List<Imovel>) imovelRepository.findImoveisPerMOnth();
+    }
+    //countImoveis
+    public Integer countImoveis(){
+        return imovelRepository.countImoveis();
+    }
+
    //POST
    public Imovel cadastrarImovel(Imovel imovel, Integer idVendedor){
         imovel.setDataCriacao(new Date());

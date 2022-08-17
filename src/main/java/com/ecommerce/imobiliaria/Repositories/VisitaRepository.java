@@ -4,6 +4,7 @@ import com.ecommerce.imobiliaria.Models.User;
 import com.ecommerce.imobiliaria.Models.Visita;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -27,4 +28,11 @@ public interface VisitaRepository extends JpaRepository<Visita, Integer> {
 
     @Query(value = "SELECT * FROM ecommerceimobiliaria.visita WHERE visita.status_visita = :status AND visita.id_consumidor = :id", nativeQuery = true)
     List<Visita> findByStatusAndIdConsumidor(String status, Integer id);
+
+    //call to procedure
+    @Query(value = "CALL visitasPerMonth()", nativeQuery = true)
+    List<?> findVisitasPorMes();
+
+    @Query(value = "SELECT COUNT(*) FROM ecommerceimobiliaria.visita", nativeQuery = true)
+    Integer findTotalVisitas();
 }

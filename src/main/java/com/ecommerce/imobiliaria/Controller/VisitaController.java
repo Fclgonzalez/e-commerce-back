@@ -69,6 +69,17 @@ public class VisitaController {
     public List<Visita> findByStatusAndIdConsumidor(@RequestParam String status, @PathVariable Integer id){
         return visitaService.findByStatusAndIdConsumidor(status, id);
     }
+    //findVisitasPorMes
+    @GetMapping("/visitas/mes")
+    public List<Visita> findVisitasPorMes(){
+        return visitaService.findVisitasPorMes();
+    }
+
+    //findTotalVisitas
+    @GetMapping("/visitas/total")
+    public Integer findTotalVisitas(){
+        return visitaService.findTotalVisitas();
+    }
 
 
     //saveVisita

@@ -166,4 +166,14 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
+    //findUsersRegistradoPorMes
+    public List<User> findUsersRegistradoPorMes(Integer idRole) {
+        return (List<User>) userRepository.findUsersRegistradoPorMes(idRole);
+    }
+
+
+    //findTotalSignedUpByRole
+    public Integer findTotalSignedUpByRole(Integer idRole) {
+        return userRepository.findTotalSignedUpByRole(idRole);
+    }
 }
