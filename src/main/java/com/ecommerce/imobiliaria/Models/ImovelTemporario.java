@@ -17,6 +17,8 @@ public class ImovelTemporario {
 
     private Integer idImovel;
 
+    private String titulo;
+
     private Date dataCriacao;
 
     private boolean contratoAluguel = false;

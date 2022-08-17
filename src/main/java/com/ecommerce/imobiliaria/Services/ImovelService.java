@@ -30,6 +30,7 @@ public class ImovelService {
     public Imovel preencherImovel(ImovelTemporario imovelTemporario){
         Imovel imovel = new Imovel();
         imovel.setIdImovel(imovelTemporario.getIdImovel());
+        imovel.setTitulo(imovelTemporario.getTitulo());
         if(imovelTemporario.isContratoAluguel()){
             imovel.setContratoAluguel(imovelTemporario.isContratoAluguel());
             imovel.setContratoVenda(false);
