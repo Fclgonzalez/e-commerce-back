@@ -77,4 +77,16 @@ public class UserController {
             User userUpdated = userService.disabilitarConta(username);
             return new ResponseEntity<>(userUpdated, HttpStatus.OK);
     }
+
+    //findUsersRegistradoPorMes
+    @GetMapping("/usuarios/registrados/{roleId}")
+    public List<User> findUsersRegistradoPorMes(@PathVariable Integer roleId) {
+        return userService.findUsersRegistradoPorMes(roleId);
+    }
+
+    //findTotalSignedUpByRole
+    @GetMapping("/usuarios/total/{roleId}")
+    public Integer findTotalSignedUpByRole(@PathVariable Integer roleId) {
+        return userService.findTotalSignedUpByRole(roleId);
+    }
 }

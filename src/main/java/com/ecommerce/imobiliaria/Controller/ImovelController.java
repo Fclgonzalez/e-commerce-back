@@ -103,6 +103,18 @@ public class ImovelController {
         List<Imovel> imoveis = imovelService.mostrarImovelTipo(tipoImovel);
         return imoveis;
     }
+    //findImoveisPerMOnth
+    @GetMapping("/imoveis/mes")
+    public List<Imovel> mostrarImovelMes(){
+        List<Imovel> imoveis = imovelService.findImoveisPerMOnth();
+        return imoveis;
+    }
+
+    //countImoveis
+    @GetMapping("/imoveis/total")
+    public Integer countImoveis(){
+        return imovelService.countImoveis();
+    }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','VENDEDOR')")
     @PostMapping("/imoveis/{idVendedor}")

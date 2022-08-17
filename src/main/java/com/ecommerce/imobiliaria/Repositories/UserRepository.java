@@ -4,6 +4,7 @@ import com.ecommerce.imobiliaria.Models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -21,6 +22,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
         @Query(value = "SELECT * FROM user, user_role WHERE user_role.id_role = :id AND user.id_user = user_role.id_user", nativeQuery = true)
         List<User> findUserByRoleId(Integer id);
 
-        @Query(value = "SELECT COUNT(*) FROM user, user_role WHERE user_role.id_role = :idRole AND user.id_user = user_role.id_user AND MONTH(data_criacao) = :month", nativeQuery = true)
-        List<User> allUsersByMonth(Integer idRole, Integer month);
+
+        //call to procedure
+        @Query(value = "CALL ecommerceimobiliaria.usersSignedUpPerMonth(?1)", nativeQuery = true)
+        List<?> findUsersRegistradoPorMes(@Param("idRole") Integer idRole);
+
+        @Query(value = "SELECT COUNT(*) FROM user_role WHERE user_role.id_role = :idRole", nativeQuery = true)
+        Integer findTotalSignedUpByRole(Integer idRole);
+
         }

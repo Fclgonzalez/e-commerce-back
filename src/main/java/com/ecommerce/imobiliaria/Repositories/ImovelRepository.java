@@ -38,4 +38,10 @@ public interface ImovelRepository extends JpaRepository<Imovel, Integer> {
 
     @Query(value = "SELECT * FROM imovel WHERE tipo_imovel =:tipoImovel",nativeQuery = true )
     List<Imovel> findByTipoImovel(String tipoImovel);
+
+    @Query(value = "CALL imoveisPerMonth()", nativeQuery = true)
+    List<?> findImoveisPerMOnth();
+
+    @Query(value = "SELECT COUNT(*) FROM ecommerceimobiliaria.imovel", nativeQuery = true)
+    Integer countImoveis();
 }
