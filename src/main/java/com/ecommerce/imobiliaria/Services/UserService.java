@@ -128,6 +128,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(idUser).orElseThrow( () -> new IllegalStateException("Usuário não encontrado"));
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow( () -> new IllegalStateException("Usuário não encontrado"));
+    }
+
     //update user
     public User updateUser(User user) {
         User userExistente = userRepository.findById(user.getIdUser()).orElse(null);
