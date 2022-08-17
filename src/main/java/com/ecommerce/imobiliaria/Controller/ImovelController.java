@@ -5,7 +5,6 @@ import com.ecommerce.imobiliaria.Models.ImovelTemporario;
 import com.ecommerce.imobiliaria.Services.ImovelService;
 import com.ecommerce.imobiliaria.Services.UserService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ import java.util.List;
 @RequestMapping("/imobil")
 @RestController
 @AllArgsConstructor
-@NoArgsConstructor
 public class ImovelController {
 
     private ImovelService imovelService;
@@ -26,8 +24,7 @@ public class ImovelController {
 
     @GetMapping("/imoveis")
     public List<Imovel> mostrarTodosImoveis(){
-        List<Imovel> imoveis = imovelService.mostrarTodosImoveis();
-        return imoveis;
+        return imovelService.mostrarTodosImoveis();
     }
 
     @GetMapping("/imoveis/{idImovel}")
