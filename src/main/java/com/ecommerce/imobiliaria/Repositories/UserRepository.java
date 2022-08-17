@@ -21,4 +21,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
         @Query(value = "SELECT * FROM user, user_role WHERE user_role.id_role = :id AND user.id_user = user_role.id_user", nativeQuery = true)
         List<User> findUserByRoleId(Integer id);
 
-}
+        @Query(value = "SELECT COUNT(*) FROM user, user_role WHERE user_role.id_role = :idRole AND user.id_user = user_role.id_user AND MONTH(data_criacao) = :month", nativeQuery = true)
+        List<User> allUsersByMonth(Integer idRole, Integer month);
+        }

@@ -56,7 +56,9 @@ public class ImovelService {
             imovel.setTipoImovel(TipoImovel.valueOf(imovelTemporario.getTipoImovel()));
         }
         imovel.setCaracteristicas(imovelTemporario.getCaracteristicas());
-        imovel.setEndereco(imovelTemporario.getEndereco());
+        if(imovelTemporario.getEndereco() != null) {
+            imovel.setEndereco(imovelTemporario.getEndereco());
+        }
         imovel.setUserVendedor(imovelTemporario.getUserVendedor());
         return imovel;
     }

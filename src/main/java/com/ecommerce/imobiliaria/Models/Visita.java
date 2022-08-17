@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -25,7 +26,7 @@ public class Visita {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(nullable = false)
-    private LocalDateTime dataVisita;
+    private LocalDate dataVisita;
 
     @JsonFormat(pattern = "HH:mm")
     @Column(nullable = false)
