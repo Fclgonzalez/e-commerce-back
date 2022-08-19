@@ -30,6 +30,13 @@ public class CaracteristicaController {
         return caracteristicaService.mostrarCaracteristicas();
     }
 
+    @GetMapping("/caracts/{idCarac}")
+    public ResponseEntity<Caracteristica> mostrarCaracteristicaPeloId(@PathVariable Integer idCarac){
+        Caracteristica caracteristica = caracteristicaService.mostrarCaracteristicaPeloId(idCarac);
+        return ResponseEntity.ok().body(caracteristica);
+    }
+
+
     @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
     @PostMapping("/caracts")
     public ResponseEntity<Caracteristica> saveNovaCaracteristica(@RequestBody Caracteristica caracteristica) {
@@ -44,7 +51,7 @@ public class CaracteristicaController {
         caracteristicaService.delete(id);
         return ResponseEntity.ok().build();
     }
-    @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
     @PostMapping("/caracts/{idImovel}/{idCarac}")
     public ResponseEntity<Void> addCaracteristicaToImovel(@PathVariable Integer idImovel, @PathVariable Integer idCarac) {
         caracteristicaService.addCaracteristicaToImovel(idImovel, idCarac);

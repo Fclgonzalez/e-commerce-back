@@ -39,7 +39,7 @@ public class EnderecoController {
         return ResponseEntity.created(novaURI).body(endereco);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
     @PostMapping("/enderecos/imovel/{idImovel}")
     public ResponseEntity<Endereco> cadastrarEnderecoImovel(@RequestBody Endereco endereco, @PathVariable Integer idImovel) {
         endereco = enderecoService.cadastrarEnderecoImovel(endereco, idImovel);
