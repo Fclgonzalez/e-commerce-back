@@ -116,7 +116,7 @@ public class ImovelController {
         return imovelService.countImoveis();
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','VENDEDOR')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','VENDEDOR')")
     @PostMapping("/imoveis/{idVendedor}")
     public ResponseEntity<Imovel> cadastrarImovel(@PathVariable Integer idVendedor,
                                                   @RequestBody ImovelTemporario imovelTemporario){
