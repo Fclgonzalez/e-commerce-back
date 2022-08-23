@@ -32,7 +32,7 @@ import java.util.Arrays;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final UserService userService;
-    private static final String[] PUBLIC_MATCHERS ={"/imobil/**"};
+    private static final String[] PUBLIC_MATCHERS ={"/imobil/**", "/actuator/**"};
     private JWTUtil jwtUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
