@@ -1,11 +1,8 @@
 package com.ecommerce.imobiliaria.Services;
 
-import com.ecommerce.imobiliaria.Models.Endereco;
+import com.ecommerce.imobiliaria.Models.*;
 import com.ecommerce.imobiliaria.Models.Enums.FinalidadeImovel;
 import com.ecommerce.imobiliaria.Models.Enums.TipoImovel;
-import com.ecommerce.imobiliaria.Models.Imovel;
-import com.ecommerce.imobiliaria.Models.ImovelTemporario;
-import com.ecommerce.imobiliaria.Models.User;
 import com.ecommerce.imobiliaria.Repositories.ImovelRepository;
 import com.ecommerce.imobiliaria.Repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -13,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -24,8 +21,92 @@ import java.util.Optional;
 public class ImovelService {
 
     ImovelRepository imovelRepository;
-
     UserRepository userRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    /**
+     *  Aprendemos Spring Data JPA (declara a query diretamente no metodo do repository atraves da annotation @Query)
+     *
+     *  O Hibernate fornece diferentes metodos para acessar os dados.
+     *       Um desses metodos é a Criteria API, que  nos permite construir um objeto de consulta de critérios programaticamente
+     *       onde podemos aplicar regras de filtragem e condições lógicas.
+     *
+     *   Usaremos convenções em vez de parametros:
+     *          1.nunca enviará propriedade com valor nulo
+     *          2.propriedades não usadas virão com zero ou ""
+     *
+     * @param imovel
+     * @return
+     */
+    public List<Imovel> filtrar(Imovel imovel) {
+
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Imovel> query = builder.createQuery(Imovel.class);
+
+        Root<Imovel> r = query.from(Imovel.class);
+        Join<Imovel, Endereco> joinEnd = r.join("endereco", JoinType.LEFT);
+
+        //-----------------------------------------------------------------
+        // crio as listas de predicados ANDs e ORs
+        //-----------------------------------------------------------------
+        ArrayList<Predicate> predicadosPropEnderecoAND = new ArrayList();
+        ArrayList<Predicate> predicadosCaracteristicasOR = new ArrayList();
+
+        //-----------------------------------------------------------------
+        //PROPRIEDADES DO IMOVEL
+        //-----------------------------------------------------------------
+        if (imovel.getValorAluguel() > 0)
+            predicadosPropEnderecoAND.add(builder.greaterThanOrEqualTo(r.get("valorAluguel"), imovel.getValorAluguel()));
+        if (imovel.getValorVenda() > 0)
+            predicadosPropEnderecoAND.add(builder.greaterThanOrEqualTo(r.get("valorVenda"), imovel.getValorVenda()));
+        if (imovel.getArea() > 0)
+            predicadosPropEnderecoAND.add(builder.greaterThanOrEqualTo(r.get("area"), imovel.getArea()));
+        if (imovel.getQuartos() > 0)
+            predicadosPropEnderecoAND.add(builder.greaterThanOrEqualTo(r.get("quartos"), imovel.getQuartos()));
+        if (imovel.getSuite() > 0)
+            predicadosPropEnderecoAND.add(builder.greaterThanOrEqualTo(r.get("suite"), imovel.getSuite()));
+        if (imovel.getBanheiros() > 0)
+            predicadosPropEnderecoAND.add(builder.greaterThanOrEqualTo(r.get("banheiros"), imovel.getBanheiros()));
+        if (imovel.getVagas() > 0)
+            predicadosPropEnderecoAND.add(builder.greaterThanOrEqualTo(r.get("vagas"), imovel.getVagas()));
+
+        predicadosPropEnderecoAND.add(builder.equal(r.get("finalidadeImovel"), imovel.getFinalidadeImovel()));
+        predicadosPropEnderecoAND.add(builder.equal(r.get("tipoImovel"), imovel.getTipoImovel()));
+
+        //-----------------------------------------------------------------
+        //ENDERECO    OBS: UF é filtrada no front
+        //-----------------------------------------------------------------
+        if(imovel.getEndereco().getCidade().trim().length() > 0)
+            predicadosPropEnderecoAND.add(builder.like(joinEnd.get("cidade"),  imovel.getEndereco().getCidade()));
+        if(imovel.getEndereco().getBairro().trim().length() > 0)
+            predicadosPropEnderecoAND.add(builder.like(joinEnd.get("bairro"),  imovel.getEndereco().getBairro()));
+
+        //-----------------------------------------------------------------
+        // CARACTERISTICAS
+        //-----------------------------------------------------------------
+        if (imovel.getCaracteristicas().size() > 0) {
+            Join<Imovel, Caracteristica> joinCaracteristicas = r.join("caracteristicas", JoinType.LEFT);
+
+            imovel.getCaracteristicas().forEach((Caracteristica c) -> {
+                predicadosCaracteristicasOR.add(builder.equal(joinCaracteristicas.get("caracteristica"), c.getCaracteristica()));
+            });
+
+            // adiciono os predicados das caracteristicas na lista principal de predicados
+            predicadosPropEnderecoAND.add(builder.or(predicadosCaracteristicasOR.toArray(new Predicate[0])));
+        }
+
+        //-----------------------------------------------------------------
+        // Preparacao da Consulta
+        //-----------------------------------------------------------------
+        Predicate[] allPredicates = new Predicate[predicadosPropEnderecoAND.size()];
+        predicadosPropEnderecoAND.toArray(allPredicates);
+
+        // consulto
+        query = query.where(allPredicates).distinct(true);
+
+        return entityManager.createQuery(query).getResultList();
+    }
 
     public Imovel preencherImovel(ImovelTemporario imovelTemporario){
         Imovel imovel = new Imovel();

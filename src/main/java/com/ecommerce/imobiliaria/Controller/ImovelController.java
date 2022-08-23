@@ -19,8 +19,12 @@ import java.util.List;
 public class ImovelController {
 
     private ImovelService imovelService;
-
     private UserService userService;
+
+    @GetMapping("/imoveisFiltrar")
+    public List<Imovel> filtrar(@RequestBody Imovel imovel){
+        return imovelService.filtrar(imovel); // "{\"success\":1}";
+    }
 
     @GetMapping("/imoveis")
     public List<Imovel> mostrarTodosImoveis(){
