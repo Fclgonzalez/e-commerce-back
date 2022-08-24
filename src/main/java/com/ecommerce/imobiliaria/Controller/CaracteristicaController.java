@@ -2,6 +2,7 @@ package com.ecommerce.imobiliaria.Controller;
 
 
 import com.ecommerce.imobiliaria.Models.Caracteristica;
+import com.ecommerce.imobiliaria.Models.Imovel;
 import com.ecommerce.imobiliaria.Services.CaracteristicaService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +37,11 @@ public class CaracteristicaController {
         return ResponseEntity.ok().body(caracteristica);
     }
 
+    @GetMapping("/caracts/imovel/{idImovel}")
+    public List<Caracteristica> MostrarCaracteristicaPeloIdImovel(@PathVariable Integer idImovel){
+        return caracteristicaService.MostrarCaracteristicaPeloIdImovel(idImovel);
+    }
+
 
     @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
     @PostMapping("/caracts")
@@ -51,6 +57,14 @@ public class CaracteristicaController {
         caracteristicaService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+//    @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
+    @DeleteMapping("/caracts/imovel/{idImovel}")
+    public ResponseEntity<Void> removerCaracteristicasDoImovel(@PathVariable Integer idImovel){
+        caracteristicaService.removerCaracteristicasDoImovel(idImovel);
+        return ResponseEntity.ok().build();
+    }
+
 //    @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
     @PostMapping("/caracts/{idImovel}/{idCarac}")
     public ResponseEntity<Void> addCaracteristicaToImovel(@PathVariable Integer idImovel, @PathVariable Integer idCarac) {

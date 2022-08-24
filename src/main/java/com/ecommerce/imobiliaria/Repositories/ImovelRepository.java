@@ -12,6 +12,12 @@ public interface ImovelRepository extends JpaRepository<Imovel, Integer> {
 
     List<Imovel> findByContratoAluguel(Boolean contratoAluguel);
 
+    @Query(value = "SELECT * FROM ecommerceimobiliaria.imovel where id_vendedor = :idVendedor AND inativo = false", nativeQuery = true)
+    List<Imovel> findByIdImovelAtivo(Integer idVendedor);
+
+    @Query(value = "SELECT * FROM ecommerceimobiliaria.imovel where id_vendedor = :idVendedor AND inativo = true", nativeQuery = true)
+    List<Imovel> findByIdImovelInativo(Integer idVendedor);
+
     @Query(value = "SELECT * FROM ecommerceimobiliaria.imovel WHERE id_vendedor = :idUser", nativeQuery = true)
     List<Imovel> findByIdUser(Integer idUser);
 

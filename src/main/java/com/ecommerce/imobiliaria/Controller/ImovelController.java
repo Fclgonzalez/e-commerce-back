@@ -13,14 +13,19 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+
 @RequestMapping("/imobil")
 @RestController
 @AllArgsConstructor
 public class ImovelController {
 
     private ImovelService imovelService;
-
     private UserService userService;
+
+    @GetMapping("/imoveisFiltrar")
+    public List<Imovel> filtrar(@RequestBody Imovel imovel){
+        return imovelService.filtrar(imovel); // "{\"success\":1}";
+    }
 
     @GetMapping("/imoveis")
     public List<Imovel> mostrarTodosImoveis(){
@@ -38,6 +43,20 @@ public class ImovelController {
         List<Imovel> imoveis = imovelService.mostrarImovelVendedor(idVendedor);
         return imoveis;
     }
+
+    @GetMapping("/imoveis/ativo/{idVendedor}")
+    public List<Imovel> mostrarImovelAtivo(@PathVariable Integer idVendedor){
+        List<Imovel> imoveis = imovelService.mostrarImovelAtivo(idVendedor);
+        return imoveis;
+    }
+
+    @GetMapping("/imoveis/inativo/{idVendedor}")
+    public List<Imovel> mostrarImovelInativo(@PathVariable Integer idVendedor){
+        List<Imovel> imoveis = imovelService.mostrarImovelInativo(idVendedor);
+        return imoveis;
+    }
+
+
     @GetMapping("/imoveisContratoAluguel")
     public List<Imovel> mostrarImovelContratoAluguel(@RequestParam("contratoAluguel") Boolean contratoAluguel){
         List<Imovel> imoveis = imovelService.mostrarImovelContratoAluguel(contratoAluguel);
@@ -116,7 +135,7 @@ public class ImovelController {
         return imovelService.countImoveis();
     }
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN','VENDEDOR')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','VENDEDOR','CONSUMIDOR')")
     @PostMapping("/imoveis/{idVendedor}")
     public ResponseEntity<Imovel> cadastrarImovel(@PathVariable Integer idVendedor,
                                                   @RequestBody ImovelTemporario imovelTemporario){
@@ -128,6 +147,7 @@ public class ImovelController {
                 .buildAndExpand(imovel.getIdImovel()).toUri();
         return ResponseEntity.created(novaURI).body(imovel);
     }
+
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @DeleteMapping("/imoveis/{idImovel}")

@@ -79,5 +79,5 @@ public class Imovel {
     @JoinColumn(name = "idVendedor", nullable = false)
     private User userVendedor;
 
-    private Boolean inativo = true;
+    private Boolean inativo = false;
 }
