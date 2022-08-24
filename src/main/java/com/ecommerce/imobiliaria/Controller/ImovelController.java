@@ -22,7 +22,7 @@ public class ImovelController {
     private ImovelService imovelService;
     private UserService userService;
 
-    @GetMapping("/imoveisFiltrar")
+    @PostMapping("/imoveisFiltrar")
     public List<Imovel> filtrar(@RequestBody Imovel imovel){
         return imovelService.filtrar(imovel); // "{\"success\":1}";
     }
