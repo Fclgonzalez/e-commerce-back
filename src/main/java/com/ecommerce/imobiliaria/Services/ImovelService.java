@@ -3,6 +3,9 @@ package com.ecommerce.imobiliaria.Services;
 import com.ecommerce.imobiliaria.Models.*;
 import com.ecommerce.imobiliaria.Models.Enums.FinalidadeImovel;
 import com.ecommerce.imobiliaria.Models.Enums.TipoImovel;
+import com.ecommerce.imobiliaria.Models.Imovel;
+import com.ecommerce.imobiliaria.Models.ImovelTemporario;
+import com.ecommerce.imobiliaria.Models.User;
 import com.ecommerce.imobiliaria.Repositories.ImovelRepository;
 import com.ecommerce.imobiliaria.Repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -22,6 +25,7 @@ public class ImovelService {
 
     ImovelRepository imovelRepository;
     UserRepository userRepository;
+    private RoleService roleService;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -154,7 +158,12 @@ public class ImovelService {
         Optional<Imovel> imovel = imovelRepository.findById(idImovel);
         return imovel.orElseThrow();
     }
-
+    public List<Imovel> mostrarImovelAtivo(Integer idVendedor){
+        return imovelRepository.findByIdImovelAtivo(idVendedor);
+    }
+    public List<Imovel> mostrarImovelInativo(Integer idVendedor){
+        return imovelRepository.findByIdImovelInativo(idVendedor);
+    }
     public List<Imovel> mostrarImovelVendedor(Integer idVendedor) {
         Optional<User> user = userRepository.findById(idVendedor);
         return imovelRepository.findByIdUser(user.get().getIdUser());
@@ -214,11 +223,15 @@ public class ImovelService {
     }
 
    //POST
-   public Imovel cadastrarImovel(Imovel imovel, Integer idVendedor){
-        imovel.setDataCriacao(new Date());
-        Optional<User> user = userRepository.findById(idVendedor);
-        imovel.setUserVendedor(user.get());
-        return imovelRepository.save(imovel);
+   public Imovel cadastrarImovel(Imovel imovel, Integer idVendedor) {
+       imovel.setDataCriacao(new Date());
+
+       Optional<User> user = userRepository.findById(idVendedor);
+       if (user.get().getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("CONSUMIDOR"))) {
+           roleService.salvarRoleNoUser("VENDEDOR", user.get().getUsername());
+       }
+       imovel.setUserVendedor(user.get());
+       return imovelRepository.save(imovel);
    }
 
    //DELETE
@@ -239,7 +252,7 @@ public class ImovelService {
 
    public Imovel inativarImovel(Integer idImovel, Boolean inativo){
         Imovel imovel = mostrarImovelById(idImovel);
-        imovel.setInativo(inativo = false);
+        imovel.setInativo(inativo);
         return imovelRepository.save(imovel);
    }
 }
