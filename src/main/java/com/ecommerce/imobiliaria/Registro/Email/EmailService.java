@@ -28,7 +28,7 @@ public class EmailService implements EmailSender {
                 mimeMessageHelper.setText(email, true);
                 mimeMessageHelper.setTo(para);
                 mimeMessageHelper.setSubject("Confirmação de cadastro");
-                mimeMessageHelper.setFrom("imobiliariasoulcode@gmail.com");
+                mimeMessageHelper.setFrom("imobiliarianossolar@datalore.com.br");
                 javaMailSender.send(mimeMessage);
             }catch (MessagingException e) {
                 LOGGER.error("Erro ao enviar o email", e);
