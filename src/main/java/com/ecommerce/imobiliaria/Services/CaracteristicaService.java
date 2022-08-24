@@ -31,6 +31,13 @@ public class CaracteristicaService {
         return caracteristica.orElseThrow( ()-> new EntityNotFoundException("Caracteristica não encontrada"));
     }
 
+    public List<Caracteristica> MostrarCaracteristicaPeloIdImovel(Integer idImovel){
+        return caracteristicaRepository.MostrarCaracteristicaPeloIdImovel(idImovel);
+
+    }
+
+
+
     public Caracteristica save(Caracteristica caracteristica) {
         caracteristica.setId(null);
         return caracteristicaRepository.save(caracteristica);
@@ -41,6 +48,11 @@ public class CaracteristicaService {
         caracteristicaRepository.deleteById(id);
     }
 
+    public void removerCaracteristicasDoImovel(Integer idImovel){
+        Imovel imovel = imovelRepository.findById(idImovel).get();
+        imovel.getCaracteristicas().clear();
+        imovelRepository.save(imovel);
+    }
 
     public void addCaracteristicaToImovel(Integer idImovel, Integer idCarac) {
         Imovel imovel = imovelRepository.findById(idImovel).get();
@@ -48,5 +60,7 @@ public class CaracteristicaService {
         imovel.getCaracteristicas().add(caracteristica);
         imovelRepository.save(imovel);
     }
+
+
 
 }

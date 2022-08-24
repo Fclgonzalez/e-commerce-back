@@ -47,7 +47,7 @@ public class EnderecoController {
         return ResponseEntity.created(novaURI).body(endereco);
     }
 
-    @PreAuthorize("hasAnyAuthority('CONSUMIDOR')")
+//    @PreAuthorize("hasAnyAuthority('CONSUMIDOR')")
     @PutMapping("/enderecos/{idEndereco}")
     public ResponseEntity<Endereco> editarEndereco(@PathVariable Integer idEndereco, @RequestBody Endereco endereco) {
         endereco.setIdEndereco(idEndereco);
