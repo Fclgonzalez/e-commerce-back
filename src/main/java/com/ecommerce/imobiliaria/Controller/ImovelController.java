@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/imobil")
 @RestController
 @AllArgsConstructor
@@ -135,9 +135,21 @@ public class ImovelController {
         return imovelService.countImoveis();
     }
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN','VENDEDOR','CONSUMIDOR')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','VENDEDOR','CONSUMIDOR')")
     @PostMapping("/imoveis/{idVendedor}")
     public ResponseEntity<Imovel> cadastrarImovel(@PathVariable Integer idVendedor,
+                                                  @RequestBody ImovelTemporario imovelTemporario){
+        Imovel imovel = new Imovel();
+        imovel = imovelService.preencherImovel(imovelTemporario);
+        imovel.setUserVendedor(userService.findById(idVendedor));
+        imovel = imovelService.cadastrarImovel(imovel, idVendedor);
+        URI novaURI = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
+                .buildAndExpand(imovel.getIdImovel()).toUri();
+        return ResponseEntity.created(novaURI).body(imovel);
+    }
+
+    @PostMapping("/imoveis/inicial{idVendedor}")
+    public ResponseEntity<Imovel> cadastrarImovelInicial(@PathVariable Integer idVendedor,
                                                   @RequestBody ImovelTemporario imovelTemporario){
         Imovel imovel = new Imovel();
         imovel = imovelService.preencherImovel(imovelTemporario);
