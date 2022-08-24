@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface FotoRepository extends JpaRepository<Foto, Integer> {
 
-    List<Foto> findByImovel(Optional<Imovel> imovel);
+//    List<Foto> findByImovel(Optional<Imovel> idImovel);
 }
