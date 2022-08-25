@@ -21,7 +21,6 @@ public class Foto {
     @Column(nullable = false, length = 255)
     private String linkFoto;
 
-    @ManyToOne
-    @JoinColumn(name = "idImovel", nullable = false)
-    private Imovel idImovel;
+    @Column(nullable = false)
+    private Integer idImovel;
 }

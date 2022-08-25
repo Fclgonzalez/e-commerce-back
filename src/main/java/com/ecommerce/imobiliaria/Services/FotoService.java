@@ -15,6 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class FotoService {
 
+    // GET
     private FotoRepository fotoRepository;
 
     private ImovelRepository imovelRepository;
@@ -28,18 +29,18 @@ public class FotoService {
         return foto.orElseThrow( ()-> new EntityNotFoundException("Foto não encontrada"));
     }
 
-//    public List<Foto> buscarFotoPorImovel(Integer idImovel){
-//        Optional<Imovel> imovel = imovelRepository.findById(idImovel);
-//        return fotoRepository.findByImovel(imovel);
-//    }
+    public List<Foto> buscarFotoPorImovel(Integer idImovel){
+        Optional<Imovel> imovel = imovelRepository.findById(idImovel);
+        return fotoRepository.findByImovel(imovel.get().getIdImovel());
+    }
 
+    // POST
     public Foto salvarFoto(Foto foto, Integer idImovel){
         foto.setId(null);
-        Optional<Imovel> imovel = imovelRepository.findById(idImovel);
-//        foto.setIdImovel(imovel.get());
         return fotoRepository.save(foto);
     }
 
+    // DELETE
     public void excluirFoto(Integer idFoto){
         fotoRepository.deleteById(idFoto);
     }

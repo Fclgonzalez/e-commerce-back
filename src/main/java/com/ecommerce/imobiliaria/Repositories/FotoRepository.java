@@ -1,13 +1,14 @@
 package com.ecommerce.imobiliaria.Repositories;
 
 import com.ecommerce.imobiliaria.Models.Foto;
-import com.ecommerce.imobiliaria.Models.Imovel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
+
 
 public interface FotoRepository extends JpaRepository<Foto, Integer> {
 
-//    List<Foto> findByImovel(Optional<Imovel> idImovel);
+    @Query(value = "SELECT * FROM foto WHERE id_imovel =:idImovel", nativeQuery = true)
+    List<Foto> findByImovel(Integer idImovel);
 }
