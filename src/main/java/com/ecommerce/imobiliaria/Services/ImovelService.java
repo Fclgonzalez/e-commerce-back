@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -140,7 +141,7 @@ public class ImovelService {
         if(imovelTemporario.getTipoImovel() != null) {
             imovel.setTipoImovel(TipoImovel.valueOf(imovelTemporario.getTipoImovel()));
         }
-        imovel.setCaracteristicas(imovelTemporario.getCaracteristicas());
+        imovel.setCaracteristicas(new HashSet<>(imovelTemporario.getCaracteristicas()));
         if(imovelTemporario.getEndereco() != null) {
             imovel.setEndereco(imovelTemporario.getEndereco());
         }

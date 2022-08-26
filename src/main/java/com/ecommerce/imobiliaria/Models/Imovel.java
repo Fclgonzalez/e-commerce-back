@@ -9,15 +9,15 @@ import org.springframework.format.annotation.NumberFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode
+@ToString
 public class Imovel {
 
     @Id
@@ -68,8 +68,11 @@ public class Imovel {
     @Enumerated(EnumType.STRING)
     private TipoImovel tipoImovel;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Caracteristica> caracteristicas = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "imovel_caracteristicas",
+            joinColumns = @JoinColumn(name = "imovel_id_imovel"),
+            inverseJoinColumns = @JoinColumn(name = "caracteristicas_id"))
+    private Set<Caracteristica> caracteristicas = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idEndereco", unique = true)
