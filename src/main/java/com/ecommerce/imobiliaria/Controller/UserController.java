@@ -63,7 +63,7 @@ public class UserController {
     @PatchMapping("/usuarios/{username}/disable")
     public ResponseEntity<User> disableUser(@PathVariable String username,  Principal principal) {
         if (principal.getName().equals(username)) {
-            User userUpdated = userService.disabilitarConta(username);
+            User userUpdated = userService.disabilitarHabilitarConta(username);
             return new ResponseEntity<>(userUpdated, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -74,7 +74,7 @@ public class UserController {
     @PatchMapping("/usuarios/{username}/admin")
     public ResponseEntity<User> adminDisableUser(@PathVariable String username ) {
 
-            User userUpdated = userService.disabilitarConta(username);
+            User userUpdated = userService.disabilitarHabilitarConta(username);
             return new ResponseEntity<>(userUpdated, HttpStatus.OK);
     }
 
@@ -89,4 +89,12 @@ public class UserController {
     public Integer findTotalSignedUpByRole(@PathVariable Integer roleId) {
         return userService.findTotalSignedUpByRole(roleId);
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PatchMapping("/usuarios/{id}/promote")
+    public ResponseEntity<User> promoverParaAdmin(@PathVariable Integer id) {
+        User userUpdated = userService.promoverParaAdmin(id);
+        return new ResponseEntity<>(userUpdated, HttpStatus.OK);
+    }
+
 }
