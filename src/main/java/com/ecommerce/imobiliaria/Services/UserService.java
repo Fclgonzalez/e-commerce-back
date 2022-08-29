@@ -88,7 +88,7 @@ public class UserService implements UserDetailsService {
     }
 
     //promover usuário para admin
-    public void promoverParaAdmin(Integer idUser) {
+    public User promoverParaAdmin(Integer idUser) {
         User user = userRepository.findById(idUser).orElse(null);
         if (user != null) {
             roleService.salvarRoleNoUser("ADMIN", user.getUsername());
@@ -96,6 +96,7 @@ public class UserService implements UserDetailsService {
         } else {
             throw new IllegalStateException("Usuário não encontrado");
         }
+        return user;
     }
 
     //promover CONSUMIDOR para VENDEDOR
@@ -118,6 +119,7 @@ public class UserService implements UserDetailsService {
     public void deleteUser(Integer id) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
+            user.getRoles().clear();
             userRepository.delete(user);
         } else {
             throw new IllegalStateException("Usuário não encontrado");
@@ -157,12 +159,10 @@ public class UserService implements UserDetailsService {
     }
 
     //set user to disabled
-    public User disabilitarConta(String username) {
+    public User disabilitarHabilitarConta(String username) {
         User user = userRepository.findByUsername(username).orElseThrow( () -> new IllegalStateException("Usuário não encontrado"));
-        if (user != null) {
-            user.setEnabled(false);
-            userRepository.save(user);
-        }
+        user.setEnabled(!user.isEnabled());
+        userRepository.save(user);
         return null;
     }
 
