@@ -148,7 +148,7 @@ public class ImovelController {
         return ResponseEntity.created(novaURI).body(imovel);
     }
 
-    @PostMapping("/imoveis/inicial{idVendedor}")
+    @PostMapping("/imoveis/inicial/{idVendedor}")
     public ResponseEntity<Imovel> cadastrarImovelInicial(@PathVariable Integer idVendedor,
                                                   @RequestBody ImovelTemporario imovelTemporario){
         Imovel imovel = new Imovel();

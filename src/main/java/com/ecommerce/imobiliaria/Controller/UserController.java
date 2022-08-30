@@ -24,6 +24,16 @@ public class UserController {
         return userService.listar();
     }
 
+    @GetMapping("/usuarios/username")
+    public String verificaUsername(@RequestParam("username") String name){
+        return userService.verificaUsername(name);
+    }
+
+    @GetMapping("/usuarios/identificacao")
+    public String verificaIdentificacao(@RequestParam("identificacao") String identificacao){
+        return  userService.verificaIdentificacao(identificacao);
+    }
+
     //findUserByRoleId
     @GetMapping("/usuarios/role/{roleId}")
     public List<User> findUserByRoleId(@PathVariable Integer roleId) {
