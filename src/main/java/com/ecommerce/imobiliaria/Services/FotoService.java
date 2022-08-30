@@ -35,8 +35,8 @@ public class FotoService {
     }
 
     // POST
-    public Foto salvarFoto(Foto foto, Integer idImovel){
-        foto.setId(null);
+    public Foto salvarFoto(Integer idImovel, String linkFoto){
+        Foto foto = new Foto(null, linkFoto, idImovel);
         return fotoRepository.save(foto);
     }
 

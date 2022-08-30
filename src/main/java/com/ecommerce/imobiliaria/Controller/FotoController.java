@@ -34,17 +34,26 @@ public class FotoController {
         return fotoService.buscarFotoPorImovel(idImovel);
     }
 
-    @PostMapping("/foto/{idImovel}")
-    public ResponseEntity<Foto> salvarFoto(@RequestBody Foto foto,
+//    @PostMapping("/fotos/{idImovel}")
+//    public ResponseEntity<Foto> salvarFoto(@RequestBody Foto foto,
+//                                           @PathVariable Integer idImovel){
+//        foto.setIdImovel(idImovel);
+//        foto = fotoService.salvarFoto(foto, idImovel);
+//        URI novaURI = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
+//                .buildAndExpand(foto.getId()).toUri();
+//        return ResponseEntity.created(novaURI).body(foto);
+//    }
+
+    @PostMapping("/fotos/{idImovel}")
+    public ResponseEntity<Foto> salvarFoto(@RequestParam("linkFoto") String linkFoto,
                                            @PathVariable Integer idImovel){
-        foto.setIdImovel(idImovel);
-        foto = fotoService.salvarFoto(foto, idImovel);
+        Foto foto = fotoService.salvarFoto(idImovel, linkFoto);
         URI novaURI = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
                 .buildAndExpand(foto.getId()).toUri();
         return ResponseEntity.created(novaURI).body(foto);
     }
 
-    @DeleteMapping("/foto/{idFoto}")
+    @DeleteMapping("/fotos/{idFoto}")
     public ResponseEntity<Void> excluirFoto(@PathVariable Integer idFoto){
         fotoService.excluirFoto(idFoto);
         return ResponseEntity.noContent().build();
