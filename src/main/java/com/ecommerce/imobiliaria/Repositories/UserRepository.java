@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.lang.constant.Constable;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,5 +30,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
         @Query(value = "SELECT COUNT(*) FROM user_role WHERE user_role.id_role = :idRole", nativeQuery = true)
         Integer findTotalSignedUpByRole(Integer idRole);
+
+        @Query(value = "SELECT username FROM ecommerceimobiliaria.user\n" +
+                        "WHERE username = :name", nativeQuery = true)
+        String verificaUsername(String name);
+
+        @Query(value="SELECT identificacao FROM ecommerceimobiliaria.user \n" +
+                "WHERE identificacao = :identificacao", nativeQuery = true)
+        String verificaIdentificacao(String identificacao);
 
         }

@@ -117,13 +117,15 @@ public class ImovelService {
         Imovel imovel = new Imovel();
         imovel.setIdImovel(imovelTemporario.getIdImovel());
         imovel.setTitulo(imovelTemporario.getTitulo());
+
+
         if(imovelTemporario.isContratoAluguel()){
             imovel.setContratoAluguel(imovelTemporario.isContratoAluguel());
-            imovel.setContratoVenda(false);
+
         }
         if(imovelTemporario.isContratoVenda()){
             imovel.setContratoVenda(imovelTemporario.isContratoVenda());
-            imovel.setContratoAluguel(false);
+
         }
         imovel.setValorAluguel(imovelTemporario.getValorAluguel());
         imovel.setValorVenda(imovelTemporario.getValorVenda());
