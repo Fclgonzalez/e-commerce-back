@@ -1,6 +1,7 @@
 package com.ecommerce.imobiliaria.Controller;
 
 import com.ecommerce.imobiliaria.Models.User;
+import com.ecommerce.imobiliaria.Repositories.UserRepository;
 import com.ecommerce.imobiliaria.Services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/imobil")
 @RestController
@@ -17,7 +19,7 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-
+    private UserRepository userRepository;
 
     @GetMapping("/usuarios")
     public List<User> usuarios() {
@@ -60,10 +62,15 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ADMIN','CONSUMIDOR','VENDEDOR')")
     @PatchMapping("/usuarios/{username}")
     public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user, Principal principal) {
+        Optional<User> userprincipal = userRepository.findByUsername(principal.getName());
         if (principal.getName().equals(username)) {
             User userUpdated = userService.updateUser(user);
             return new ResponseEntity<>(userUpdated, HttpStatus.OK);
-        } else {
+        } else if (userprincipal.get().getAuthorities().stream().anyMatch(x -> x.getAuthority().equals("ADMIN"))) {
+            User userUpdated = userService.updateUser(user);
+            return new ResponseEntity<>(userUpdated, HttpStatus.OK);
+        }
+        else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
