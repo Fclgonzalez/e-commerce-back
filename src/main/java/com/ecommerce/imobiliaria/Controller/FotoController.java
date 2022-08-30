@@ -47,8 +47,7 @@ public class FotoController {
     @PostMapping("/fotos/{idImovel}")
     public ResponseEntity<Foto> salvarFoto(@RequestParam("linkFoto") String linkFoto,
                                            @PathVariable Integer idImovel){
-        Foto foto = new Foto();
-        foto = fotoService.salvarFoto(idImovel, linkFoto);
+        Foto foto = fotoService.salvarFoto(idImovel, linkFoto);
         URI novaURI = ServletUriComponentsBuilder.fromCurrentRequest().path("{/id}")
                 .buildAndExpand(foto.getId()).toUri();
         return ResponseEntity.created(novaURI).body(foto);
