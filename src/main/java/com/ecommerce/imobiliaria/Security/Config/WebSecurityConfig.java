@@ -46,11 +46,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
         http.addFilter(new CustomAuthenticationFilter(authenticationManager(), jwtUtil));
         http.addFilter(new CustomAuthorizationFilter(authenticationManager(), jwtUtil));
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/actuator/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests()
                 .antMatchers(PUBLIC_MATCHERS)
                 .permitAll()
                 .anyRequest().authenticated();
-
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     }

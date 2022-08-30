@@ -61,6 +61,10 @@ public class ImovelService {
         //-----------------------------------------------------------------
         //PROPRIEDADES DO IMOVEL
         //-----------------------------------------------------------------
+        if (imovel.isContratoAluguel())
+            predicadosPropEnderecoAND.add(builder.equal(r.get("contratoAluguel"), imovel.isContratoAluguel()));
+        if (imovel.isContratoVenda())
+            predicadosPropEnderecoAND.add(builder.equal(r.get("contratoVenda"), imovel.isContratoVenda()));
         if (imovel.getValorAluguel() > 0)
             predicadosPropEnderecoAND.add(builder.greaterThanOrEqualTo(r.get("valorAluguel"), imovel.getValorAluguel()));
         if (imovel.getValorVenda() > 0)

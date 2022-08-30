@@ -51,7 +51,7 @@ public class VisitaService {
         Optional<User> userVendedor = Optional.ofNullable(userRepository.findById(imovel.getUserVendedor().getIdUser()).orElseThrow(
                 () -> new EntityNotFoundException("Vendedor não encontrado")));
 
-        if (userConsumidor.get().getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("CONSUMIDOR"))
+        if (userConsumidor.get().getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("CONSUMIDOR") || r.getAuthority().equals("VENDEDOR") || r.getAuthority().equals("ADMIN"))
                 && Objects.equals(userVendedor.get().getIdUser(), imovel.getUserVendedor().getIdUser())) {
             visita.setIdVisita(null);
             visita.setImovel(imovel);
