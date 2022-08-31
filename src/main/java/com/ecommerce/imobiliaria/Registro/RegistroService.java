@@ -43,7 +43,7 @@ public class RegistroService {
 
         );
         roleService.salvarRoleNoUser("CONSUMIDOR", request.getUsername());
-        String link = "http://localhost:8080/imobil/confirmar?token=" + token;
+        String link = "https://api-nossolar.herokuapp.com/imobil/confirmar?token=" + token;
         emailSender.send(request.getUsername(), buildEmail(request.getNome(), link ));
         return null;
 
